@@ -64,7 +64,7 @@ These Terms may be updated from time to time. Continued use of the App after upd
 
 ## 10. Contact
 
-For questions about these Terms, post to <https://github.com/jghaines/devvit-rss-to-post-bot/discussions>
+For questions about these Terms, post to <https://github.com/phixion/tagesschau-bot/issues>
 
 ## 11. Governing Law
 
