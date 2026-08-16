@@ -56,16 +56,7 @@
     "http": {
       "enable": true,
       "domains": [
-        "feeds.acast.com",
-        "feeds.megaphone.fm",
-        "feeds.npr.org",
-        "feeds.simplecast.com",
-        "rss.buzzsprout.com",
-        "www.omnycontent.com",
-        "thecleanpaper.com",
-        "www.relay.fm",
-        "www.swr.de",
-        "www.theguardian.com"
+        "www.tagesschau.de"
       ]
     },
     "redis": true,
