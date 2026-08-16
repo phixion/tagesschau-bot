@@ -52,16 +52,8 @@ When you hit a domain exception:
 
 This app currently fetches from:
 
-- `feeds.acast.com`
-- `feeds.megaphone.fm`
-- `feeds.npr.org`
-- `feeds.simplecast.com`
-- `rss.buzzsprout.com`
-- `www.omnycontent.com`
-- `thecleanpaper.com`
-- `www.relay.fm`
-- `www.swr.de`
-- `www.theguardian.com`
+- `www.tagesschau.de`
+
 
 This list must stay in sync with the `http.domains` array in [`devvit.json`](./devvit.json).
 
@@ -71,4 +63,4 @@ The previous technical/developer README has moved to [DEVELOPER.md](./DEVELOPER.
 
 ## Support
 
-- Repo and issues: [github.com/jghaines/devvit-rss-to-post-bot](https://github.com/jghaines/devvit-rss-to-post-bot)
+forked from https://github.com/jghaines/devvit-rss-to-post-bot
