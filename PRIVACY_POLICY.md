@@ -2,7 +2,7 @@
 
 Effective date: February 18, 2026
 
-This Privacy Policy describes how `rss-post-bot` (the "App") collects, uses, stores, and discloses information when used on Reddit.
+This Privacy Policy describes how `tagesschau-bot` (the "App") collects, uses, stores, and discloses information when used on Reddit.
 
 ## 1. Information We Process
 
