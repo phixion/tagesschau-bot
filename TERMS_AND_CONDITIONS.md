@@ -2,7 +2,7 @@
 
 Effective date: February 18, 2026
 
-These Terms and Conditions ("Terms") govern your use of the `rss-post-bot` application (the "App") on Reddit.
+These Terms and Conditions ("Terms") govern your use of the `tagesschau-bot` application (the "App") on Reddit.
 
 By installing, configuring, or using the App, you agree to these Terms.
 
