@@ -40,8 +40,8 @@
   },
   "devDependencies": {
     "devvit": "^0.14.1",
-    "esbuild": "0.28.1",
-    "vitest": "4.1.10"
+    "esbuild": "0.28.2",
+    "vitest": "4.1.11"
   },
   "license": "BSD-3-Clause",
   "allowScripts": {
