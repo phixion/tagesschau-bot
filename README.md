@@ -57,11 +57,11 @@ This app currently fetches from:
 
 This list must stay in sync with the `http.domains` array in [`devvit.json`](./devvit.json).
 
-## tagesschau public API / feeds
+## Public API / feeds documentation
 
-- bundes API github repo: [`bundesAPI/tagesschau-api`](https://github.com/bundesAPI/tagesschau-api)
-- public API documentation:[`tagesschau.api.bund.dev`](https://tagesschau.api.bund.dev)
-- public rss feeds: [`tagesschau.de infoservices/rssfeeds`](https://www.tagesschau.de/infoservices/rssfeeds)
+- bundesAPI tagesschau-api repository - [`bundesAPI/tagesschau-api`](https://github.com/bundesAPI/tagesschau-api)
+- bundesAPI tagesschau-api documentation - [`tagesschau.api.bund.dev`](https://tagesschau.api.bund.dev)
+- tagesschau public rss feeds - [`infoservices/rssfeeds`](https://www.tagesschau.de/infoservices/rssfeeds)
 
 ## Developer documentation
 
