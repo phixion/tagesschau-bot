@@ -67,6 +67,9 @@
     "dev": "node tools/build.mjs --watch",
     "build": "node tools/build.mjs"
   },
+  "marketingAssets": {
+    "icon": "assets/icon.png"
+  },
   "dev": {
     "subreddit": "phixion_test_dev"
   }
