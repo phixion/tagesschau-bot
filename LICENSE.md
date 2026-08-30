@@ -1,6 +1,6 @@
 # 0BSD License
 
-Copyright (c) 2026 rss-post-bot contributors
+Copyright (c) 2026 tagesschau-bot contributors
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted.

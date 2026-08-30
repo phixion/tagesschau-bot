@@ -8,7 +8,7 @@ By installing, configuring, or using the App, you agree to these Terms.
 
 ## 1. App Overview
 
-`rss-post-bot` is a Reddit Devvit application that:
+`tagesschau-bot` is a Reddit Devvit application that:
 
 - fetches RSS/Atom feed content from configured domains,
 - converts feed items into Reddit posts based on configuration,

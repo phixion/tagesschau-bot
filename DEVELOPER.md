@@ -1,4 +1,4 @@
-# devvit-rss-to-post-bot
+# devvit-tagesschau-bot
 
 [![CI](https://github.com/jghaines/devvit-rss-to-post-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/jghaines/devvit-rss-to-post-bot/actions/workflows/ci.yml)
 
