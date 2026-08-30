@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 
 const DEFAULT_TOKEN_FILE = "~/.devvit/token";
-const DEFAULT_USER_AGENT = "devvit-rss-to-post-bot/0.1";
+const DEFAULT_USER_AGENT = "tagesschau-bot/0.1";
 
 /**
  * @param {{ env: NodeJS.ProcessEnv; nowMs?: number }} params
@@ -11,13 +11,15 @@ const DEFAULT_USER_AGENT = "devvit-rss-to-post-bot/0.1";
  */
 export function getDevvitAccessToken(params) {
   const env = params.env || process.env;
-  const nowMs = Number.isFinite(params.nowMs) ? Number(params.nowMs) : Date.now();
+  const nowMs = Number.isFinite(params.nowMs)
+    ? Number(params.nowMs)
+    : Date.now();
   const tokenFileRaw = String(env.DEVVIT_TOKEN_FILE || DEFAULT_TOKEN_FILE);
   const tokenFile = resolveUserPath(tokenFileRaw);
 
   if (!fs.existsSync(tokenFile)) {
     throw new Error(
-      `Devvit token file not found at ${tokenFile}. Run "npx devvit login" or set DEVVIT_TOKEN_FILE.`
+      `Devvit token file not found at ${tokenFile}. Run "npx devvit login" or set DEVVIT_TOKEN_FILE.`,
     );
   }
 
@@ -32,7 +34,9 @@ export function getDevvitAccessToken(params) {
 
   const encoded = String(wrapper?.token || "").trim();
   if (!encoded) {
-    throw new Error(`Devvit token file does not contain a token value: ${tokenFile}`);
+    throw new Error(
+      `Devvit token file does not contain a token value: ${tokenFile}`,
+    );
   }
 
   const decoded = decodeDevvitTokenEnvelope(encoded);
@@ -46,7 +50,7 @@ export function getDevvitAccessToken(params) {
   }
   if (!Number.isFinite(expiresAt) || expiresAt < nowMs + 30_000) {
     throw new Error(
-      `Devvit access token is expired or near expiry. Re-run "npx devvit login" to refresh ~/.devvit/token.`
+      `Devvit access token is expired or near expiry. Re-run "npx devvit login" to refresh ~/.devvit/token.`,
     );
   }
 
@@ -91,7 +95,9 @@ export async function submitRedditPost(params) {
   const response = await fetch("https://oauth.reddit.com/api/submit", {
     method: "POST",
     headers: {
-      Authorization: `${normalizeTokenType(params.tokenType)} ${params.accessToken}`,
+      Authorization: `${normalizeTokenType(params.tokenType)} ${
+        params.accessToken
+      }`,
       "Content-Type": "application/x-www-form-urlencoded",
       "User-Agent": String(params.userAgent || DEFAULT_USER_AGENT),
     },
@@ -116,13 +122,16 @@ export async function submitRedditPost(params) {
  */
 function decodeDevvitTokenEnvelope(encoded) {
   const normalized = encoded.replace(/-/g, "+").replace(/_/g, "/");
-  const padded = normalized + "=".repeat((4 - (normalized.length % 4 || 4)) % 4);
+  const padded =
+    normalized + "=".repeat((4 - (normalized.length % 4 || 4)) % 4);
   const decodedRaw = Buffer.from(padded, "base64").toString("utf8");
 
   try {
     return JSON.parse(decodedRaw);
   } catch {
-    throw new Error("Could not decode token payload from ~/.devvit/token. Try re-running `npx devvit login`.");
+    throw new Error(
+      "Could not decode token payload from ~/.devvit/token. Try re-running `npx devvit login`.",
+    );
   }
 }
 

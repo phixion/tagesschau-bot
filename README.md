@@ -53,7 +53,7 @@ When you hit a domain exception:
 This app currently fetches from:
 
 - `www.tagesschau.de`
-
+- `staging.tagesschau.de`
 
 This list must stay in sync with the `http.domains` array in [`devvit.json`](./devvit.json).
 

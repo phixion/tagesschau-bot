@@ -1,6 +1,6 @@
 # devvit-tagesschau-bot
 
-[![CI](https://github.com/jghaines/devvit-rss-to-post-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/jghaines/devvit-rss-to-post-bot/actions/workflows/ci.yml)
+[![CI](https://github.com/phixion/tagesschau-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/phixion/tagesschau-bot/devvit-rss-to-post-bot/actions/workflows/ci.yml)
 
 Devvit bot that polls an RSS/Atom feed and submits new entries to Reddit.
 
@@ -252,7 +252,7 @@ We are not using GitHub-hosted Actions for unattended Devvit publish because:
 
 Until Devvit documents a proper non-interactive publish credential, treat Devvit publish as a manual step on a logged-in developer machine or on a persistent self-hosted runner that you control.
 
-Before upload, verify `devvit-rss-to-post-bot/devvit.json`:
+Before upload, verify `tagesschau-bot/devvit.json`:
 
 - `name` is globally unique and at most 16 characters
 - `permissions.http.domains` includes your RSS host (exact hostname, no protocol)
