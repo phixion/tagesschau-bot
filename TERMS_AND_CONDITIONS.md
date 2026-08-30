@@ -1,6 +1,6 @@
 # Terms and Conditions
 
-Effective date: February 18, 2026
+Effective date: August 30, 2026
 
 These Terms and Conditions ("Terms") govern your use of the `tagesschau-bot` application (the "App") on Reddit.
 

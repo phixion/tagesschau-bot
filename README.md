@@ -55,6 +55,12 @@ This app currently fetches from:
 - `www.tagesschau.de`
 - `staging.tagesschau.de`
 
+## tagesschau public api / rss documentation
+
+- https://github.com/bundesAPI/tagesschau-api
+- https://tagesschau.api.bund.dev
+- https://www.tagesschau.de/infoservices/rssfeeds
+
 This list must stay in sync with the `http.domains` array in [`devvit.json`](./devvit.json).
 
 ## Developer documentation

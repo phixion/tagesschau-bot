@@ -1,6 +1,6 @@
 {
   "name": "tagesschau-bot",
-  "version": "0.0.0",
+  "version": "0.1",
   "private": true,
   "description": "Devvit RSS-to-link-post bot with checkpoint tracking and local CLI harness.",
   "type": "module",
@@ -18,17 +18,22 @@
     "release:prod": "npm test && node scripts/devvit-publish-and-tag.mjs"
   },
   "dependencies": {
-    "@devvit/reddit": "0.13.10",
-    "@devvit/redis": "0.13.10",
-    "@devvit/scheduler": "0.13.10",
-    "@devvit/server": "0.13.10",
-    "@devvit/settings": "0.13.10",
-    "@devvit/web": "0.13.10"
+    "@devvit/reddit": "0.14.1",
+    "@devvit/redis": "0.14.1",
+    "@devvit/scheduler": "0.14.1",
+    "@devvit/server": "0.14.1",
+    "@devvit/settings": "0.14.1",
+    "@devvit/web": "0.14.1"
   },
   "devDependencies": {
-    "devvit": "0.13.10",
+    "devvit": "0.14.1",
     "esbuild": "0.28.1",
     "vitest": "4.1.10"
   },
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "allowScripts": {
+    "esbuild@0.25.9": true,
+    "esbuild@0.28.1": true,
+    "protobufjs@7.6.3": true
+  }
 }

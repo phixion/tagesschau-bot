@@ -56,7 +56,8 @@
     "http": {
       "enable": true,
       "domains": [
-        "www.tagesschau.de"
+        "www.tagesschau.de",
+        "staging.tagesschau.de"
       ]
     },
     "redis": true,
@@ -67,6 +68,6 @@
     "build": "node tools/build.mjs"
   },
   "dev": {
-    "subreddit": "hardforkrssbot_dev"
+    "subreddit": "phixion_test_dev"
   }
 }

@@ -1,6 +1,6 @@
 # Privacy Policy
 
-Effective date: February 18, 2026
+Effective date: August 30, 2026
 
 This Privacy Policy describes how `tagesschau-bot` (the "App") collects, uses, stores, and discloses information when used on Reddit.
 
