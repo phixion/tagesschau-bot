@@ -1,14 +1,14 @@
-# RSS Post Bot
+# tagesschau-bot
 
-RSS Post Bot polls one RSS/Atom feed on a schedule and publishes new entries to Reddit.
+tagesschau-bot polls one RSS/Atom feed on a schedule and publishes new entries to Reddit.
 
 It keeps a checkpoint and dedupe history so feed reorder/edits do not repost old content.
 
 ## What moderators can use it for
 
-- Auto-post your podcast/news/blog feed into a subreddit.
+- Auto-post news entries from tagesschau.de feed into a subreddit.
 - Post as link posts or self posts.
-- Control cadence and safety limits per installation.
+- Control cadence and safety limits.
 
 ## Setup (moderators)
 
@@ -52,20 +52,17 @@ When you hit a domain exception:
 
 This app currently fetches from:
 
-- `www.tagesschau.de`
-- `staging.tagesschau.de`
-  This list must stay in sync with the `http.domains` array in [`devvit.json`](./devvit.json).
+- `www.tagesschau.de` - used to fetch rss feeds from tagesschau.de
+- `staging.tagesschau.de` - used to fetch rss feeds from staging branch of tagesschau.de
 
-## tagesschau public api / rss documentation
+This list must stay in sync with the `http.domains` array in [`devvit.json`](./devvit.json).
 
-- https://github.com/bundesAPI/tagesschau-api
-- https://tagesschau.api.bund.dev
-- https://www.tagesschau.de/infoservices/rssfeeds
+## tagesschau public API / feeds
+
+- bundes API github repo: [`bundesAPI/tagesschau-api`](https://github.com/bundesAPI/tagesschau-api)
+- public API documentation:[`tagesschau.api.bund.dev`](https://tagesschau.api.bund.dev)
+- public rss feeds: [`tagesschau.de infoservices/rssfeeds`](https://www.tagesschau.de/infoservices/rssfeeds)
 
 ## Developer documentation
 
 The previous technical/developer README has moved to [DEVELOPER.md](./DEVELOPER.md).
-
-## Support
-
-forked from https://github.com/jghaines/devvit-rss-to-post-bot

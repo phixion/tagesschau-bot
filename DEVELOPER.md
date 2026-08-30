@@ -1,4 +1,4 @@
-# devvit-tagesschau-bot
+# tagesschau-bot
 
 [![CI](https://github.com/phixion/tagesschau-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/phixion/tagesschau-bot/devvit-rss-to-post-bot/actions/workflows/ci.yml)
 
@@ -22,8 +22,8 @@ The app runs on **Devvit Web** (`@devvit/web`). All configuration — server ent
 
 ## Deployment account
 
-> **This app is owned and deployed by the Reddit account `hardforkbot`.**
-> Every `npx devvit login` step below must authenticate as `hardforkbot` — playtest, upload, and publish all require it. If `devvit login` reports `Logged in as <someone-else>`, run `npx devvit logout` and log back in as `hardforkbot` before continuing, otherwise the CLI will target the wrong owner's app.
+> **This app is owned and deployed by the Reddit account `username`.**
+> Every `npx devvit login` step below must authenticate as `username` — playtest, upload, and publish all require it. If `devvit login` reports `Logged in as <someone-else>`, run `npx devvit logout` and log back in as `username` before continuing, otherwise the CLI will target the wrong owner's app.
 
 ## Local setup
 
@@ -91,12 +91,12 @@ npm run local:preview -- --json
 - Body text comes from RSS `<description>` (or Atom `summary`/`content`)
 - Description HTML is converted into Reddit-compatible Markdown
 - In `POST_KIND=self`, body is submitted as post text (this is post format, not destination)
-- In `POST_KIND=self`, Reddit only receives title + URL (preview still shows converted body text)
+- In `POST_KIND=title`, Reddit only receives title + URL (preview still shows converted body text)
 - Destination always comes from `TARGET_SUBREDDIT` (`MySubreddit` or `u_<your_username>`)
 
 ## .env credential injection
 
-For local live submit testing (`npm run local:live`), authenticate with Devvit CLI as `hardforkbot`:
+For local live submit testing (`npm run local:live`), authenticate with Devvit CLI as `username`:
 
 ```bash
 npx devvit login
@@ -124,16 +124,16 @@ Install dependencies:
 npm install
 ```
 
-Authenticate with Reddit through Devvit CLI as the `hardforkbot` account:
+Authenticate with Reddit through Devvit CLI as the `username` account:
 
 ```bash
 npx devvit login
 ```
 
-The login flow opens a Reddit auth URL in your browser. Sign in as `hardforkbot` when prompted. After approval, you should see output like:
+The login flow opens a Reddit auth URL in your browser. Sign in as `username` when prompted. After approval, you should see output like:
 
 - `Your Devvit authentication token has been saved to /Users/<you>/.devvit/token`
-- `Logged in as hardforkbot`
+- `Logged in as username`
 
 Then run:
 
@@ -174,7 +174,7 @@ npm ci
 npm test
 ```
 
-1. Authenticate with Devvit CLI as `hardforkbot` (confirm the CLI prints `Logged in as hardforkbot`):
+1. Authenticate with Devvit CLI as `username` (confirm the CLI prints `Logged in as username`):
 
 ```bash
 npx devvit login
@@ -270,7 +270,7 @@ Use this when you want to post feed entries into a real subreddit (`r/<name>`) r
 
 ### Option A: local CLI (single run)
 
-1. Authenticate once with Devvit CLI as `hardforkbot`:
+1. Authenticate once with Devvit CLI as `username`:
 
 ```bash
 npx devvit login
@@ -332,7 +332,7 @@ MAX_POSTS_PER_RUN=1 \
 npm run local:preview
 ```
 
-Submit a real self-post to Reddit (uses `~/.devvit/token` from the `hardforkbot` Devvit CLI login):
+Submit a real self-post to Reddit (uses `~/.devvit/token` from the `username` Devvit CLI login):
 
 ```bash
 POST_KIND=self \
@@ -356,4 +356,4 @@ Recommended: use a dedicated test subreddit and a fresh `STATE_FILE` for each li
 
 The app requests the following external HTTP fetch domain:
 
-- `feeds.simplecast.com` - reads the configured RSS feed for polling and post generation.
+- `www.tagesschau.com` - reads the configured RSS feed for polling and post generation.

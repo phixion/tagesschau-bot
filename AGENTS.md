@@ -6,9 +6,9 @@ Run tests with `npm test` (uses vitest). All tests must pass before committing.
 
 ## Deployment workflow
 
-This app is owned and deployed by the Reddit account `hardforkbot`. Devvit CLI auth
-(`npx devvit login`) for playtest, upload, and publish must be logged in as `hardforkbot`
-(the CLI should print `Logged in as hardforkbot`).
+This app is owned and deployed by the Reddit account `username`. Devvit CLI auth
+(`npx devvit login`) for playtest, upload, and publish must be logged in as `username`
+(the CLI should print `Logged in as username`).
 
 Always test and commit before publishing (`devvit publish`).
 Publishing requires a clean git state (no uncommitted or untracked changes).
