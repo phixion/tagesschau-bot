@@ -53,7 +53,7 @@ test("chooseEntriesToPost on first run selects newest maxPostsPerRun entries", (
 
   assert.deepEqual(
     selected.map((item) => item.entry.id),
-    ["b", "c"]
+    ["b", "c"],
   );
 });
 
@@ -68,7 +68,7 @@ test("chooseEntriesToPost skips dedupe fingerprints", () => {
 
   assert.deepEqual(
     selected.map((item) => item.entry.id),
-    ["c"]
+    ["c"],
   );
 });
 
@@ -79,7 +79,10 @@ test("applyPostedEntry updates checkpoint and dedupe list", () => {
 
   assert.equal(state.checkpoint?.fingerprint, fingerprintEntry(FEED[1]));
   assert.equal(state.dedupe.length, 2);
-  assert.deepEqual(state.dedupe, [fingerprintEntry(FEED[1]), fingerprintEntry(FEED[0])]);
+  assert.deepEqual(state.dedupe, [
+    fingerprintEntry(FEED[1]),
+    fingerprintEntry(FEED[0]),
+  ]);
 });
 
 test("state serialization round-trips", () => {
@@ -91,4 +94,37 @@ test("state serialization round-trips", () => {
   const parsed = parseState(serialized);
 
   assert.deepEqual(parsed, original);
+});
+
+test("parseFeedUrls parses single, multiline, comma-separated and array URLs", async () => {
+  const { parseFeedUrls } = await import("../src/core/schedule.mjs");
+
+  assert.deepEqual(parseFeedUrls(null), []);
+  assert.deepEqual(parseFeedUrls(""), []);
+  assert.deepEqual(parseFeedUrls("https://www.tagesschau.de/xml/rss2_https/"), [
+    "https://www.tagesschau.de/xml/rss2_https/",
+  ]);
+  assert.deepEqual(
+    parseFeedUrls(
+      "https://www.tagesschau.de/inland\nhttps://www.tagesschau.de/ausland",
+    ),
+    ["https://www.tagesschau.de/inland", "https://www.tagesschau.de/ausland"],
+  );
+  assert.deepEqual(
+    parseFeedUrls(
+      "https://www.tagesschau.de/inland, https://www.tagesschau.de/ausland; https://www.tagesschau.de/inland",
+    ),
+    ["https://www.tagesschau.de/inland", "https://www.tagesschau.de/ausland"],
+  );
+  assert.deepEqual(
+    parseFeedUrls([
+      "https://www.tagesschau.de/1",
+      "https://www.tagesschau.de/2\nhttps://www.tagesschau.de/3",
+    ]),
+    [
+      "https://www.tagesschau.de/1",
+      "https://www.tagesschau.de/2",
+      "https://www.tagesschau.de/3",
+    ],
+  );
 });

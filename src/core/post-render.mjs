@@ -1,4 +1,3 @@
-const DEFAULT_TITLE_PREFIX = "[RSS] ";
 const DEFAULT_MAX_TITLE_CHARS = 300;
 const DEFAULT_MAX_BODY_CHARS = 12000;
 
@@ -15,27 +14,33 @@ const DEFAULT_MAX_BODY_CHARS = 12000;
  */
 
 /**
- * @param {{ title: string; url: string; descriptionHtml?: string }} entry
- * @param {{ titlePrefix?: string; postKind?: string; maxTitleChars?: number; maxBodyChars?: number }} options
+ * @param {{ title: string; url: string; descriptionHtml?: string; imageUrl?: string }} entry
+ * @param {{ postKind?: string; maxTitleChars?: number; maxBodyChars?: number }} options
  * @returns {RenderedPost}
  */
 export function renderEntryForReddit(entry, options = {}) {
-  const titlePrefix = String(options.titlePrefix ?? DEFAULT_TITLE_PREFIX);
   const postKind = resolvePostKind(options.postKind);
-  const maxTitleChars = parsePositiveInt(options.maxTitleChars, DEFAULT_MAX_TITLE_CHARS);
-  const maxBodyChars = parsePositiveInt(options.maxBodyChars, DEFAULT_MAX_BODY_CHARS);
+  const maxTitleChars = parsePositiveInt(
+    options.maxTitleChars,
+    DEFAULT_MAX_TITLE_CHARS,
+  );
+  const maxBodyChars = parsePositiveInt(
+    options.maxBodyChars,
+    DEFAULT_MAX_BODY_CHARS,
+  );
 
-  const explicitTitle = buildExplicitTitle(titlePrefix, String(entry.title || "").trim());
-  const safeTitle = clipText(explicitTitle || String(entry.title || "").trim(), maxTitleChars);
-  const descriptionMarkdown = htmlToRedditMarkdown(String(entry.descriptionHtml || ""));
+  const safeTitle = clipText(String(entry.title || "").trim(), maxTitleChars);
+  const descriptionMarkdown = htmlToRedditMarkdown(
+    String(entry.descriptionHtml || ""),
+  );
   const sourceUrl = String(entry.url || "").trim();
 
   const bodyParts = [];
-  if (sourceUrl) {
-    bodyParts.push(`[Original link](${sourceUrl})`);
-  }
   if (descriptionMarkdown) {
     bodyParts.push(descriptionMarkdown);
+  }
+  if (sourceUrl) {
+    bodyParts.push(`[...zum Artikel](${sourceUrl})`);
   }
   const bodyText = clipText(bodyParts.join("\n\n"), maxBodyChars);
 
@@ -110,7 +115,9 @@ export function htmlToRedditMarkdown(html) {
  * @returns {PostKind}
  */
 export function resolvePostKind(value) {
-  const normalized = String(value ?? "self").trim().toLowerCase();
+  const normalized = String(value ?? "self")
+    .trim()
+    .toLowerCase();
   if (normalized === "link") {
     return "link";
   }
@@ -204,18 +211,4 @@ function parsePositiveInt(value, fallback) {
     return fallback;
   }
   return parsed;
-}
-
-/**
- * @param {string} prefix
- * @param {string} title
- * @returns {string}
- */
-function buildExplicitTitle(prefix, title) {
-  const cleanTitle = String(title || "").trim();
-  const cleanPrefix = String(prefix || "").trim();
-  if (!cleanPrefix) {
-    return cleanTitle;
-  }
-  return `${cleanPrefix} ${cleanTitle}`.trim();
 }

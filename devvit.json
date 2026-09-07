@@ -18,9 +18,10 @@
   },
   "settings": {
     "subreddit": {
-      "feedUrl": {
-        "type": "string",
-        "label": "Feed URL"
+      "feedUrls": {
+        "type": "paragraph",
+        "label": "Feed URLs",
+        "helpText": "One or more Tagesschau RSS feed URLs to monitor (one per line or comma-separated)"
       },
       "targetSubreddit": {
         "type": "string",
@@ -41,10 +42,6 @@
       "postKind": {
         "type": "string",
         "label": "Post kind: self or link"
-      },
-      "titlePrefix": {
-        "type": "string",
-        "label": "Explicit title prefix"
       },
       "maxBodyChars": {
         "type": "number",

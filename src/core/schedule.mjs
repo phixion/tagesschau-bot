@@ -30,6 +30,40 @@ export function normalizeString(value) {
 }
 
 /**
+ * Parse and normalize one or more feed URLs from a string, array, or mixed input.
+ * Accepts newlines, commas, or semicolons as delimiters.
+ * Deduplicates entries and filters out empty items.
+ *
+ * @param {unknown} value
+ * @returns {string[]}
+ */
+export function parseFeedUrls(value) {
+  if (value == null) {
+    return [];
+  }
+
+  const rawList = Array.isArray(value) ? value : [value];
+  const urls = [];
+  const seen = new Set();
+
+  for (const item of rawList) {
+    if (item == null) {
+      continue;
+    }
+    const lines = String(item).split(/[\r\n,;]+/);
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed && !seen.has(trimmed)) {
+        seen.add(trimmed);
+        urls.push(trimmed);
+      }
+    }
+  }
+
+  return urls;
+}
+
+/**
  * Normalize a target subreddit setting into the bare name expected by the
  * Reddit API (strips a leading `r/`, maps `u/name` to the `u_name` profile sub).
  *

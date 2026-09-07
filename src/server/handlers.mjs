@@ -18,6 +18,7 @@ import {
   clamp,
   normalizeString,
   normalizeSubredditName,
+  parseFeedUrls,
   parsePositiveInt,
 } from "../core/schedule.mjs";
 
@@ -28,27 +29,81 @@ import {
 export const JOB_NAME = "poll-rss-feed";
 
 /**
- * Poll the configured RSS feed once and submit any new entries as Reddit posts.
+ * Poll the configured RSS feed(s) once and submit any new entries as Reddit posts.
  * Invoked by the `/internal/scheduler/poll-rss-feed` endpoint on each cron tick
  * (and the warm-up run scheduled at install/upgrade).
  */
 export async function runPollJob() {
-  const feedUrl = normalizeString(await settings.get("feedUrl"));
-  const targetSubreddit = normalizeSubredditName(await settings.get("targetSubreddit"));
-  const maxPostsPerRun = parsePositiveInt(await settings.get("maxPostsPerRun"), DEFAULT_MAX_POSTS_PER_RUN);
-  const maxDedupeTrack = parsePositiveInt(await settings.get("maxDedupeTrack"), DEFAULT_MAX_DEDUPE);
+  const feedUrls = parseFeedUrls(await settings.get("feedUrls"));
+  const targetSubreddit = normalizeSubredditName(
+    await settings.get("targetSubreddit"),
+  );
+  const maxPostsPerRun = parsePositiveInt(
+    await settings.get("maxPostsPerRun"),
+    DEFAULT_MAX_POSTS_PER_RUN,
+  );
+  const maxDedupeTrack = parsePositiveInt(
+    await settings.get("maxDedupeTrack"),
+    DEFAULT_MAX_DEDUPE,
+  );
   const postKind = normalizeString(await settings.get("postKind")) || "self";
-  const titlePrefix = normalizeString(await settings.get("titlePrefix")) || "[RSS] ";
-  const maxBodyChars = parsePositiveInt(await settings.get("maxBodyChars"), 12000);
-
-  console.log(
-    `[${JOB_NAME}] run started target=${targetSubreddit || "(empty)"} maxPostsPerRun=${maxPostsPerRun} postKind=${postKind}`
+  const maxBodyChars = parsePositiveInt(
+    await settings.get("maxBodyChars"),
+    12000,
   );
 
-  if (!feedUrl || !targetSubreddit) {
-    console.log(`[${JOB_NAME}] Missing feedUrl or targetSubreddit setting. Skipping run.`);
+  console.log(
+    `[${JOB_NAME}] run started target=${targetSubreddit || "(empty)"} feeds=${
+      feedUrls.length
+    } maxPostsPerRun=${maxPostsPerRun} postKind=${postKind}`,
+  );
+
+  if (feedUrls.length === 0 || !targetSubreddit) {
+    console.log(
+      `[${JOB_NAME}] Missing feedUrls or targetSubreddit setting. Skipping run.`,
+    );
     return;
   }
+
+  for (const feedUrl of feedUrls) {
+    try {
+      await pollSingleFeed({
+        feedUrl,
+        targetSubreddit,
+        maxPostsPerRun,
+        maxDedupeTrack,
+        postKind,
+        maxBodyChars,
+      });
+    } catch (err) {
+      console.error(
+        `[${JOB_NAME}] Error processing feed ${feedUrl}: ${
+          err instanceof Error ? err.stack ?? err.message : String(err)
+        }`,
+      );
+    }
+  }
+}
+
+/**
+ * @param {{
+ *   feedUrl: string;
+ *   targetSubreddit: string;
+ *   maxPostsPerRun: number;
+ *   maxDedupeTrack: number;
+ *   postKind: string;
+ *   maxBodyChars: number;
+ * }} options
+ */
+async function pollSingleFeed(options) {
+  const {
+    feedUrl,
+    targetSubreddit,
+    maxPostsPerRun,
+    maxDedupeTrack,
+    postKind,
+    maxBodyChars,
+  } = options;
 
   const stateKey = buildStateKey(feedUrl, targetSubreddit);
   const rawState = await redis.get(stateKey);
@@ -61,19 +116,20 @@ export async function runPollJob() {
 
   const xml = await response.text();
   const entries = parseFeedXml(xml);
-  console.log(`[${JOB_NAME}] Parsed entries=${entries.length}`);
+  console.log(`[${JOB_NAME}] Feed=${feedUrl} parsed entries=${entries.length}`);
   const selected = chooseEntriesToPost({
     entries,
     checkpoint: state.checkpoint,
     dedupe: state.dedupe,
     maxPostsPerRun,
   });
-  console.log(`[${JOB_NAME}] Selected entries=${selected.length}`);
+  console.log(
+    `[${JOB_NAME}] Feed=${feedUrl} selected entries=${selected.length}`,
+  );
 
   for (const item of selected) {
     const rendered = renderEntryForReddit(item.entry, {
       postKind,
-      titlePrefix,
       maxBodyChars,
     });
 
@@ -93,7 +149,9 @@ export async function runPollJob() {
 
     state = applyPostedEntry(state, item, maxDedupeTrack);
     await redis.set(stateKey, serializeState(state, maxDedupeTrack));
-    console.log(`[${JOB_NAME}] Posted fingerprint=${item.fingerprint}`);
+    console.log(
+      `[${JOB_NAME}] Posted fingerprint=${item.fingerprint} from feed=${feedUrl}`,
+    );
   }
 }
 
@@ -103,14 +161,20 @@ export async function runPollJob() {
  * cron interval tracks the per-installation `pollMinutes` setting.
  */
 export async function schedulePollingJob() {
-  const pollMinutes = clamp(parsePositiveInt(await settings.get("pollMinutes"), 15), 1, 60);
+  const pollMinutes = clamp(
+    parsePositiveInt(await settings.get("pollMinutes"), 15),
+    1,
+    60,
+  );
   const cron = buildPollingCron(pollMinutes);
   console.log(`[${JOB_NAME}] Scheduling with cron=${cron}`);
   await scheduler.runJob({ name: JOB_NAME, cron });
 
   const warmupAt = new Date(Date.now() + 15_000);
   await scheduler.runJob({ name: JOB_NAME, runAt: warmupAt });
-  console.log(`[${JOB_NAME}] Scheduled warm-up run at ${warmupAt.toISOString()}`);
+  console.log(
+    `[${JOB_NAME}] Scheduled warm-up run at ${warmupAt.toISOString()}`,
+  );
 }
 
 /**
@@ -133,9 +197,13 @@ export async function serverOnRequest(req, rsp) {
   try {
     await routeRequest(req, rsp);
   } catch (err) {
-    const message = err instanceof Error ? err.stack ?? err.message : String(err);
+    const message =
+      err instanceof Error ? err.stack ?? err.message : String(err);
     console.error(`server error; ${message}`);
-    writeJson(rsp, 500, { status: "error", message: err instanceof Error ? err.message : String(err) });
+    writeJson(rsp, 500, {
+      status: "error",
+      message: err instanceof Error ? err.message : String(err),
+    });
   }
 }
 
@@ -155,7 +223,10 @@ async function routeRequest(req, rsp) {
       await schedulePollingJob();
       return writeJson(rsp, 200, { status: "ok" });
     default:
-      return writeJson(rsp, 404, { status: "error", message: `not found: ${path}` });
+      return writeJson(rsp, 404, {
+        status: "error",
+        message: `not found: ${path}`,
+      });
   }
 }
 

@@ -10,6 +10,7 @@ export const DEFAULT_MAX_DEDUPE = 500;
  * @property {string} url
  * @property {string | undefined} publishedAt
  * @property {string | undefined} descriptionHtml
+ * @property {string | undefined} imageUrl
  */
 
 /**
@@ -48,7 +49,9 @@ export function fingerprintEntry(entry) {
     return `url:${hashText(urlPart)}`;
   }
 
-  return `fallback:${hashText(`${normalizeString(entry.title)}|${normalizeString(entry.publishedAt)}`)}`;
+  return `fallback:${hashText(
+    `${normalizeString(entry.title)}|${normalizeString(entry.publishedAt)}`,
+  )}`;
 }
 
 /**
@@ -80,6 +83,7 @@ export function normalizeEntries(entries) {
       url,
       publishedAt: normalizeString(item.publishedAt) || undefined,
       descriptionHtml: normalizeString(item.descriptionHtml) || undefined,
+      imageUrl: normalizeString(item.imageUrl) || undefined,
     });
   }
 
@@ -131,9 +135,14 @@ export function chooseEntriesToPost(params) {
   const entries = sortOldestFirst(normalizeEntries(params.entries));
   const checkpoint = params.checkpoint ?? null;
   const dedupeSet = new Set(Array.isArray(params.dedupe) ? params.dedupe : []);
-  const maxPostsPerRun = parsePositiveInt(params.maxPostsPerRun, DEFAULT_MAX_POSTS_PER_RUN);
+  const maxPostsPerRun = parsePositiveInt(
+    params.maxPostsPerRun,
+    DEFAULT_MAX_POSTS_PER_RUN,
+  );
   const startIndex =
-    checkpoint == null ? Math.max(0, entries.length - maxPostsPerRun) : findStartIndex(entries, checkpoint);
+    checkpoint == null
+      ? Math.max(0, entries.length - maxPostsPerRun)
+      : findStartIndex(entries, checkpoint);
 
   /** @type {{ entry: FeedEntry; fingerprint: string }[]} */
   const selected = [];
@@ -163,7 +172,10 @@ export function chooseEntriesToPost(params) {
 export function applyPostedEntry(state, posted, maxDedupe) {
   const max = parsePositiveInt(maxDedupe, DEFAULT_MAX_DEDUPE);
   const fingerprint = posted.fingerprint || fingerprintEntry(posted.entry);
-  const dedupe = [fingerprint, ...state.dedupe.filter((item) => item !== fingerprint)].slice(0, max);
+  const dedupe = [
+    fingerprint,
+    ...state.dedupe.filter((item) => item !== fingerprint),
+  ].slice(0, max);
 
   return {
     checkpoint: buildCheckpoint(posted.entry),
@@ -210,10 +222,13 @@ export function serializeState(state, maxDedupe) {
         urlHash: normalizeString(state.checkpoint.urlHash),
       }
     : null;
-  const dedupe = Array.from(new Set((state.dedupe || []).map((value) => normalizeString(value)).filter(Boolean))).slice(
-    0,
-    max
-  );
+  const dedupe = Array.from(
+    new Set(
+      (state.dedupe || [])
+        .map((value) => normalizeString(value))
+        .filter(Boolean),
+    ),
+  ).slice(0, max);
 
   return JSON.stringify({ checkpoint, dedupe });
 }
@@ -229,7 +244,9 @@ function findStartIndex(entries, checkpoint) {
   }
 
   if (checkpoint.fingerprint) {
-    const idx = entries.findIndex((entry) => fingerprintEntry(entry) === checkpoint.fingerprint);
+    const idx = entries.findIndex(
+      (entry) => fingerprintEntry(entry) === checkpoint.fingerprint,
+    );
     if (idx >= 0) {
       return idx + 1;
     }

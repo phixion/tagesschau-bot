@@ -41,10 +41,9 @@ cp .env.example .env
 
 1. Edit `.env`:
 
-- Set `FEED_URL`
+- Set `FEED_URLS` (one or more Tagesschau feed URLs, separated by newlines or commas)
 - Set `TARGET_SUBREDDIT` (for profile posts, use `u_<your_username>`)
 - Set `POST_KIND` (`self` or `link`)
-- Set `TITLE_PREFIX` for explicit titles
 - Keep `DRY_RUN=true` for initial validation
 
 1. Run local tests:
@@ -71,11 +70,11 @@ npm run local:test:env
 npm run local:preview:env
 ```
 
-or with your own file/URL:
+or with your own files/URLs:
 
 ```bash
 npm run local:preview -- --feed ./fixtures/sample-rss.xml
-npm run local:preview -- --feed https://example.com/feed.xml
+npm run local:preview -- --feed https://www.tagesschau.de/inland/index~rss2.xml --feed https://www.tagesschau.de/ausland/index~rss2.xml
 ```
 
 For machine-readable output:
@@ -86,7 +85,7 @@ npm run local:preview -- --json
 
 ## Title and body behavior
 
-- Title is always explicit: `TITLE_PREFIX + <rss item title>`
+- The Reddit title is taken from the RSS/Atom item title
 - Title is automatically clipped for Reddit-safe submission (300 chars by default)
 - Body text comes from RSS `<description>` (or Atom `summary`/`content`)
 - Description HTML is converted into Reddit-compatible Markdown
@@ -259,7 +258,7 @@ Before upload, verify `devvit.json`:
 
 Set runtime values after install/playtest in app installation settings:
 
-- `feedUrl`
+- `feedUrls`
 - `targetSubreddit`
 - `pollMinutes` (set `60` for hourly)
 - `maxPostsPerRun` (set `1` for safer initial rollout)
@@ -280,7 +279,7 @@ npx devvit login
 
 ```bash
 POST_KIND=self \
-FEED_URL=https://www.tagesschau.de/xml/rss2_https/ \
+FEED_URLS=https://www.tagesschau.de/xml/rss2_https/ \
 TARGET_SUBREDDIT=YourSubreddit \
 MAX_POSTS_PER_RUN=1 \
 STATE_FILE=.tmp/subreddit-preview-state.json \
@@ -291,7 +290,7 @@ npm run local:preview
 
 ```bash
 POST_KIND=self \
-FEED_URL=https://www.tagesschau.de/xml/rss2_https/ \
+FEED_URLS=https://www.tagesschau.de/xml/rss2_https/ \
 TARGET_SUBREDDIT=YourSubreddit \
 MAX_POSTS_PER_RUN=1 \
 STATE_FILE=.tmp/subreddit-live-state.json \
@@ -309,7 +308,7 @@ Notes:
 1. Ensure the feed hostname is listed in `devvit.json` under `permissions.http.domains`.
 1. Upload/install the app and open installation settings.
 1. Set:
-   - `feedUrl=https://...`
+   - `feedUrls=https://...`
    - `targetSubreddit=YourSubreddit`
    - `postKind=link` or `self`
    - `pollMinutes=60` (or your preferred interval)
@@ -325,7 +324,7 @@ Preview exactly what would be posted (no Reddit submit):
 
 ```bash
 POST_KIND=self \
-FEED_URL=./fixtures/6HKOhNgS.rss.xml \
+FEED_URLS=./fixtures/6HKOhNgS.rss.xml \
 TARGET_SUBREDDIT=u_yourusername \
 STATE_FILE=.tmp/selfpost-test.json \
 MAX_POSTS_PER_RUN=1 \
@@ -336,7 +335,7 @@ Submit a real self-post to Reddit (uses `~/.devvit/token` from the `username` De
 
 ```bash
 POST_KIND=self \
-FEED_URL=./fixtures/6HKOhNgS.rss.xml \
+FEED_URLS=./fixtures/6HKOhNgS.rss.xml \
 TARGET_SUBREDDIT=u_yourusername \
 STATE_FILE=.tmp/selfpost-live-test.json \
 MAX_POSTS_PER_RUN=1 \

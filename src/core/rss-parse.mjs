@@ -5,6 +5,7 @@
  * @property {string} url
  * @property {string | undefined} publishedAt
  * @property {string | undefined} descriptionHtml
+ * @property {string | undefined} imageUrl
  */
 
 /**
@@ -42,8 +43,13 @@ function parseRssItems(xml) {
     const link = cleanup(readTagText(block, "link"));
     const pubDate = cleanup(readTagText(block, "pubDate"));
     const dcDate = cleanup(readTagText(block, "dc:date"));
-    const descriptionHtml = cleanupHtml(readTagText(block, "description")) || cleanupHtml(readTagText(block, "content:encoded")) || undefined;
+    const descriptionHtml =
+      cleanupHtml(readTagText(block, "description")) ||
+      cleanupHtml(readTagText(block, "content:encoded")) ||
+      undefined;
     const publishedAt = pubDate || dcDate || undefined;
+    const imageUrl =
+      cleanup(findEntryImage(block, descriptionHtml || "")) || undefined;
 
     if (!title || !link) {
       continue;
@@ -55,6 +61,7 @@ function parseRssItems(xml) {
       url: link,
       publishedAt,
       descriptionHtml,
+      imageUrl,
     });
   }
 
@@ -80,6 +87,8 @@ function parseAtomEntries(xml) {
     const descriptionHtml = summaryHtml || contentHtml || undefined;
     const publishedAt = updated || published || undefined;
     const link = findAtomLink(block);
+    const imageUrl =
+      cleanup(findEntryImage(block, descriptionHtml || "")) || undefined;
 
     if (!title || !link) {
       continue;
@@ -91,10 +100,110 @@ function parseAtomEntries(xml) {
       url: cleanup(link),
       publishedAt,
       descriptionHtml,
+      imageUrl,
     });
   }
 
   return entries;
+}
+
+/**
+ * @param {string} block
+ * @param {string} [htmlContent]
+ * @returns {string | undefined}
+ */
+function findEntryImage(block, htmlContent = "") {
+  // 1. media:content or media:thumbnail
+  const mediaTags = [
+    ...block.matchAll(/<media:(?:content|thumbnail)\b([^>]*)\/?>/gi),
+  ];
+  for (const match of mediaTags) {
+    const attrs = String(match[1] || "");
+    const url = readAttribute(attrs, "url");
+    const medium = readAttribute(attrs, "medium");
+    const type = readAttribute(attrs, "type");
+    if (
+      url &&
+      (medium === "image" ||
+        type.startsWith("image/") ||
+        isImageUrl(url) ||
+        !medium)
+    ) {
+      return url;
+    }
+  }
+
+  // 2. enclosure
+  const enclosures = [...block.matchAll(/<enclosure\b([^>]*)\/?>/gi)];
+  for (const match of enclosures) {
+    const attrs = String(match[1] || "");
+    const url = readAttribute(attrs, "url");
+    const type = readAttribute(attrs, "type");
+    if (url && (type.startsWith("image/") || isImageUrl(url))) {
+      return url;
+    }
+  }
+
+  // 3. itunes:image
+  const itunesMatches = [...block.matchAll(/<itunes:image\b([^>]*)\/?>/gi)];
+  for (const match of itunesMatches) {
+    const href = readAttribute(String(match[1] || ""), "href");
+    if (href) {
+      return href;
+    }
+  }
+
+  // 4. image tag inside item (<image><url>...</url></image>)
+  const imageBlock = readTagText(block, "image");
+  if (imageBlock) {
+    const url = readTagText(imageBlock, "url") || cleanup(imageBlock);
+    if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
+      return cleanup(url);
+    }
+  }
+
+  // 5. atom link enclosure
+  const linkTags = [...block.matchAll(/<link\b([^>]*)\/?>/gi)];
+  for (const match of linkTags) {
+    const attrs = String(match[1] || "");
+    const rel = readAttribute(attrs, "rel");
+    const type = readAttribute(attrs, "type");
+    const href = readAttribute(attrs, "href");
+    if (
+      href &&
+      (rel === "enclosure" || type.startsWith("image/")) &&
+      (type.startsWith("image/") || isImageUrl(href))
+    ) {
+      return href;
+    }
+  }
+
+  // 6. img src in description / content
+  const rawHtml = decodeXmlEntities(String(htmlContent || ""));
+  if (rawHtml) {
+    const imgMatches = [...rawHtml.matchAll(/<img\b([^>]*)\/?>/gi)];
+    for (const match of imgMatches) {
+      const src = readAttribute(String(match[1] || ""), "src");
+      if (
+        src &&
+        (src.startsWith("http://") ||
+          src.startsWith("https://") ||
+          src.startsWith("/"))
+      ) {
+        return src;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+/**
+ * @param {string} url
+ * @returns {boolean}
+ */
+function isImageUrl(url) {
+  return /\.(?:jpe?g|png|webp|gif|avif|svg)(?:\?.*)?$/i.test(url);
 }
 
 /**
@@ -148,7 +257,10 @@ function matchBlocks(xml, tag) {
  */
 function readTagText(block, tag) {
   const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const pattern = new RegExp(`<${escapedTag}\\b[^>]*>([\\s\\S]*?)<\\/${escapedTag}>`, "i");
+  const pattern = new RegExp(
+    `<${escapedTag}\\b[^>]*>([\\s\\S]*?)<\\/${escapedTag}>`,
+    "i",
+  );
   const match = block.match(pattern);
   return match ? match[1] : "";
 }

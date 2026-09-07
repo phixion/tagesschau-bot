@@ -7,29 +7,29 @@ It features persistent Redis-based checkpointing and deduplication to ensure tha
 ## Key Features
 
 - **Automated Tagesschau News Delivery**: Keep your community informed with the latest German and international news from tagesschau.de.
+- **Multiple Feed Monitoring**: Watch multiple Tagesschau feeds concurrently (e.g. main feed + Inland + Investigativ) with isolated checkpoints per feed.
 - **Flexible Post Formats**: Post as direct Reddit link posts (linking to tagesschau.de articles) or rich self-text posts with converted Markdown article summaries.
 - **Selective Feeds**: Subscribe to any official Tagesschau feed—such as the main news feed, _Inland_, _Ausland_, _Wirtschaft_, _Investigativ_, or regional news.
 - **Duplicate & Crash Protection**: Built-in fingerprinting and checkpoint history prevent duplicate posts, even if Tagesschau updates an article title or description.
-- **Configurable Cadence & Safety**: Full control over polling intervals, maximum posts per cycle, title prefixes, and character limits.
+- **Configurable Cadence & Safety**: Full control over polling intervals, maximum posts per cycle, and character limits.
 
 ## Setup (Moderators)
 
 1. Install **tagesschau-bot**
 1. Open the app's installation settings.
 1. Configure the following options:
-   - `feedUrl`: Tagesschau RSS feed URL to monitor (e.g. `https://www.tagesschau.de/xml/rss2_https/` or a specific topic feed).
+   - `feedUrls`: One or more Tagesschau RSS feed URLs to monitor (one per line or comma-separated).
    - `targetSubreddit`: Destination subreddit (or `u_<username>` for user profile posts).
    - `pollMinutes`: Polling schedule interval in minutes (`60` = hourly check).
-   - `maxPostsPerRun`: Maximum number of news entries to post in one run (`1` to `3` recommended).
+   - `maxPostsPerRun`: Maximum number of news entries to post in one run per feed (`1` to `3` recommended).
    - `postKind`: Post format — `link` (direct link to Tagesschau) or `self` (text post with summary).
-   - `titlePrefix`: Prefix for Reddit post titles (e.g. `[Tagesschau] ` or `[Nachrichten] `).
    - `maxBodyChars`: Maximum character length for self-post bodies before truncation.
    - `maxDedupeTrack`: Number of recent post fingerprints retained to prevent duplicates (default `500`).
 1. Save settings and wait for the first scheduled run.
 
 ## Popular Tagesschau Feeds
 
-Choose an official feed URL to paste into `feedUrl`:
+Choose one or more official feed URLs to paste into `feedUrls` (one per line):
 
 - **Main News Feed**: `https://www.tagesschau.de/xml/rss2_https/`
 - **Inland**: `https://www.tagesschau.de/inland/index~rss2.xml`
