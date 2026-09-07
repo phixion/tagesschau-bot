@@ -102,16 +102,21 @@ jobs:
           fi
 
           echo "Using: devvit ${DEVVIT_CMD}"
-          npx --yes devvit "${DEVVIT_CMD}" --bump "${BUMP_TYPE}" | tee /tmp/devvit-deploy.log
+          npx --yes devvit "${DEVVIT_CMD}" --bump "${BUMP_TYPE}" 2>&1 | tee /tmp/devvit-deploy.log || {
+            EXIT_CODE=$?
+            # Check if it's the "AppVersion already exists" error
+            if grep -q "AppVersion already exists" /tmp/devvit-deploy.log; then
+              echo "::warning::AppVersion already exists. Retrying with next prerelease version..."
+              npx --yes devvit "${DEVVIT_CMD}" --bump prerelease | tee /tmp/devvit-deploy.log
+            else
+              exit $EXIT_CODE
+            fi
+          }
 
           # Try multiple patterns to extract version
           version="$(sed -nE 's/.*Uploading new version "?([0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?)"?.*/\1/p' /tmp/devvit-deploy.log | tail -n1)"
           if [ -z "${version}" ]; then
             version="$(sed -nE 's/.*version[^0-9]*([0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?).*/\1/p' /tmp/devvit-deploy.log | tail -n1)"
-          fi
-          if [ -z "${version}" ]; then
-            # Fallback: check devvit.json for the version
-            version="$(sed -nE 's/.*"version"[^0-9]*"([0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?)".*/\1/p' devvit.json | head -n1)"
           fi
 
           if [ -z "${version}" ]; then
