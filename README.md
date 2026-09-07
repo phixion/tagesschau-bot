@@ -14,7 +14,7 @@ It features persistent Redis-based checkpointing and deduplication to ensure tha
 
 ## Setup (Moderators)
 
-1. Install **tagesschau-bot** onto your subreddit.
+1. Install **tagesschau-bot**
 1. Open the app's installation settings.
 1. Configure the following options:
    - `feedUrl`: Tagesschau RSS feed URL to monitor (e.g. `https://www.tagesschau.de/xml/rss2_https/` or a specific topic feed).
@@ -31,11 +31,12 @@ It features persistent Redis-based checkpointing and deduplication to ensure tha
 
 Choose an official feed URL to paste into `feedUrl`:
 
-- **Main News Feed (Alle Meldungen)**: `https://www.tagesschau.de/xml/rss2_https/`
+- **Main News Feed**: `https://www.tagesschau.de/xml/rss2_https/`
 - **Inland**: `https://www.tagesschau.de/inland/index~rss2.xml`
 - **Ausland**: `https://www.tagesschau.de/ausland/index~rss2.xml`
 - **Wirtschaft**: `https://www.tagesschau.de/wirtschaft/index~rss2.xml`
 - **Investigativ**: `https://www.tagesschau.de/investigativ/index~rss2.xml`
+- **Eilmeldung**: `https://www.tagesschau.de/infoservices/eilmeldungen-100~rss2.xml`
 - More feeds and regional editions: [Tagesschau RSS-Feeds Übersicht](https://www.tagesschau.de/infoservices/rssfeeds)
 
 ## Posting Behavior
@@ -45,28 +46,11 @@ Choose an official feed URL to paste into `feedUrl`:
 - **Reddit Limits**: Post titles and bodies are automatically sanitized and clipped within Reddit limits.
 - **Markdown Conversion**: HTML descriptions in the feed are parsed and converted to clean Reddit Markdown for self posts.
 
-## Domain Exceptions Limitation (Important)
-
-Devvit fetch permissions are restricted to exact, pre-approved hostnames per app release.
-Moderators cannot override this from subreddit settings.
-
-If your `feedUrl` hostname is not in the list below, polling will fail until the app is updated.
-
-When you hit a domain exception:
-
-1. Check the hostname in your `feedUrl` (example: `www.tagesschau.de`).
-1. Compare it to the `Fetch Domains` list in this README.
-1. If it is missing, contact the maintainer with:
-   - the requested hostname
-   - a sample feed URL
-1. After the maintainer ships an update that includes that hostname, reinstall/upgrade the app and re-save settings.
-
 ## Fetch Domains
 
-This app currently fetches from:
+The following domains are requested for this app:
 
-- `www.tagesschau.de` - used to fetch rss feeds from tagesschau.de
-- `staging.tagesschau.de` - used to fetch rss feeds from staging branch of tagesschau.de
+- `www.tagesschau.de` - Used to fetch public RSS news feeds from Tagesschau (tagesschau.de) to create link/self posts on Reddit.
 
 This list must stay in sync with the `http.domains` array in [`devvit.json`](./devvit.json).
 

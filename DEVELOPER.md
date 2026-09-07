@@ -354,9 +354,8 @@ Recommended: use a dedicated test subreddit and a fresh `STATE_FILE` for each li
 
 ## Fetch Domains
 
-This app currently fetches from:
+The following domains are requested for this app:
 
-- `www.tagesschau.de` - used to fetch rss feeds from tagesschau.de
-- `staging.tagesschau.de` - used to fetch rss feeds from staging branch of tagesschau.de
+- `www.tagesschau.de` - Used to fetch public RSS news feeds from Tagesschau (tagesschau.de) for automated news posting.
 
 This list must stay in sync with the `http.domains` array in [`devvit.json`](./devvit.json).
