@@ -107,7 +107,7 @@ jobs:
             # Check if it's the "AppVersion already exists" error
             if grep -q "AppVersion already exists" /tmp/devvit-deploy.log; then
               echo "::warning::AppVersion already exists. Retrying with next prerelease version..."
-              npx --yes devvit "${DEVVIT_CMD}" --bump prerelease | tee /tmp/devvit-deploy.log
+              npx --yes devvit "${DEVVIT_CMD}" --bump minor | tee /tmp/devvit-deploy.log
             else
               exit $EXIT_CODE
             fi
