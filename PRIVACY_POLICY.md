@@ -71,4 +71,4 @@ This Privacy Policy may be updated from time to time. Continued use of the App a
 
 ## 11. Contact
 
-For privacy questions or requests, contact: <https://github.com/phixion/tagesschau-bot/issues>
+For privacy questions or requests, open an issue at <https://github.com/phixion/tagesschau-bot/issues>.

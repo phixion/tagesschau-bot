@@ -1,6 +1,6 @@
 # tagesschau-bot
 
-[![CI](https://github.com/phixion/tagesschau-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/phixion/tagesschau-bot/devvit-rss-to-post-bot/actions/workflows/ci.yml)
+[![CI](https://github.com/phixion/tagesschau-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/phixion/tagesschau-bot/actions/workflows/ci.yml)
 
 Devvit bot that polls an RSS/Atom feed and submits new entries to Reddit.
 
@@ -91,7 +91,7 @@ npm run local:preview -- --json
 - Body text comes from RSS `<description>` (or Atom `summary`/`content`)
 - Description HTML is converted into Reddit-compatible Markdown
 - In `POST_KIND=self`, body is submitted as post text (this is post format, not destination)
-- In `POST_KIND=title`, Reddit only receives title + URL (preview still shows converted body text)
+- In `POST_KIND=link`, Reddit only receives title + URL (preview still shows converted body text)
 - Destination always comes from `TARGET_SUBREDDIT` (`MySubreddit` or `u_<your_username>`)
 
 ## .env credential injection
@@ -252,7 +252,7 @@ We are not using GitHub-hosted Actions for unattended Devvit publish because:
 
 Until Devvit documents a proper non-interactive publish credential, treat Devvit publish as a manual step on a logged-in developer machine or on a persistent self-hosted runner that you control.
 
-Before upload, verify `tagesschau-bot/devvit.json`:
+Before upload, verify `devvit.json`:
 
 - `name` is globally unique and at most 16 characters
 - `permissions.http.domains` includes your RSS host (exact hostname, no protocol)
@@ -280,7 +280,7 @@ npx devvit login
 
 ```bash
 POST_KIND=self \
-FEED_URL=https://feeds.simplecast.com/your-feed-id \
+FEED_URL=https://www.tagesschau.de/xml/rss2_https/ \
 TARGET_SUBREDDIT=YourSubreddit \
 MAX_POSTS_PER_RUN=1 \
 STATE_FILE=.tmp/subreddit-preview-state.json \
@@ -291,7 +291,7 @@ npm run local:preview
 
 ```bash
 POST_KIND=self \
-FEED_URL=https://feeds.simplecast.com/your-feed-id \
+FEED_URL=https://www.tagesschau.de/xml/rss2_https/ \
 TARGET_SUBREDDIT=YourSubreddit \
 MAX_POSTS_PER_RUN=1 \
 STATE_FILE=.tmp/subreddit-live-state.json \
@@ -354,6 +354,9 @@ Recommended: use a dedicated test subreddit and a fresh `STATE_FILE` for each li
 
 ## Fetch Domains
 
-The app requests the following external HTTP fetch domain:
+This app currently fetches from:
 
-- `www.tagesschau.com` - reads the configured RSS feed for polling and post generation.
+- `www.tagesschau.de` - used to fetch rss feeds from tagesschau.de
+- `staging.tagesschau.de` - used to fetch rss feeds from staging branch of tagesschau.de
+
+This list must stay in sync with the `http.domains` array in [`devvit.json`](./devvit.json).
