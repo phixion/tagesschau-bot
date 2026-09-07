@@ -41,7 +41,8 @@
   "devDependencies": {
     "devvit": "0.14.2",
     "esbuild": "0.28.1",
-    "vitest": "4.1.10"
+    "vitest": "4.1.10",
+    "yaml": "^2.9.0"
   },
   "license": "BSD-3-Clause",
   "allowScripts": {
