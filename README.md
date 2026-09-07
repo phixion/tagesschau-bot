@@ -9,7 +9,7 @@ It features persistent Redis-based checkpointing and deduplication to ensure tha
 - **Automated Tagesschau News Delivery**: Keep your community informed with the latest German and international news from tagesschau.de.
 - **Multiple Feed Monitoring**: Watch multiple Tagesschau feeds concurrently (e.g. main feed + Inland + Investigativ) with isolated checkpoints per feed.
 - **Flexible Post Formats**: Post as direct Reddit link posts (linking to tagesschau.de articles) or rich self-text posts with converted Markdown article summaries.
-- **Selective Feeds**: Subscribe to any official Tagesschau feed—such as the main news feed, _Inland_, _Ausland_, _Wirtschaft_, _Investigativ_, or regional news.
+- **Selective Feeds**: Subscribe to any official Tagesschau feed, such as the main news feed, _Inland_, _Ausland_, _Wirtschaft_, _Investigativ_, or regional news.
 - **Duplicate & Crash Protection**: Built-in fingerprinting and checkpoint history prevent duplicate posts, even if Tagesschau updates an article title or description.
 - **Configurable Cadence & Safety**: Full control over polling intervals, maximum posts per cycle, and character limits.
 
@@ -22,7 +22,7 @@ It features persistent Redis-based checkpointing and deduplication to ensure tha
    - `targetSubreddit`: Destination subreddit (or `u_<username>` for user profile posts).
    - `pollMinutes`: Polling schedule interval in minutes (`60` = hourly check).
    - `maxPostsPerRun`: Maximum number of news entries to post in one run per feed (`1` to `3` recommended).
-   - `postKind`: Post format — `link` (direct link to Tagesschau) or `self` (text post with summary).
+   - `postKind`: Post format - `link` (direct link to Tagesschau) or `self` (text post with summary).
    - `maxBodyChars`: Maximum character length for self-post bodies before truncation.
    - `maxDedupeTrack`: Number of recent post fingerprints retained to prevent duplicates (default `500`).
 1. Save settings and wait for the first scheduled run.
@@ -56,9 +56,9 @@ This list must stay in sync with the `http.domains` array in [`devvit.json`](htt
 
 ## Public API / Feeds Documentation
 
-- Tagesschau public RSS feeds — [`infoservices/rssfeeds`](https://www.tagesschau.de/infoservices/rssfeeds)
-- bundesAPI tagesschau-api repository — [`bundesAPI/tagesschau-api`](https://github.com/bundesAPI/tagesschau-api)
-- bundesAPI tagesschau-api documentation — [`tagesschau.api.bund.dev`](https://tagesschau.api.bund.dev)
+- Tagesschau public RSS feeds - [`infoservices/rssfeeds`](https://www.tagesschau.de/infoservices/rssfeeds)
+- bundesAPI tagesschau-api repository - [`bundesAPI/tagesschau-api`](https://github.com/bundesAPI/tagesschau-api)
+- bundesAPI tagesschau-api documentation - [`tagesschau.api.bund.dev`](https://tagesschau.api.bund.dev)
 
 ## Developer Documentation
 

@@ -25,7 +25,7 @@ and creates + pushes a `devvit/prod/v<version>` git tag.
 **`devvit upload` and `devvit publish` are NOT dry-runs.** The 0.13.x CLI runs
 straight through build → version-bump → upload/publish with no confirmation prompt,
 and each invocation auto-increments the app's build number. Never run either "just to
-validate" the config — there is no local-only validation via these commands.
+validate" the config - there is no local-only validation via these commands.
 
 ## Server imports
 

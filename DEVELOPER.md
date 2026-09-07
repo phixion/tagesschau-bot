@@ -9,7 +9,7 @@ It tracks the "last post" checkpoint plus a dedupe window so feed reorder/edit n
 ## Project layout
 
 - `src/server/index.js`: Devvit Web server entrypoint (`createServer` + listen)
-- `src/server/handlers.mjs`: internal HTTP handlers — scheduler poll job + install/upgrade triggers (Reddit submit + Redis-backed state)
+- `src/server/handlers.mjs`: internal HTTP handlers - scheduler poll job + install/upgrade triggers (Reddit submit + Redis-backed state)
 - `src/core/schedule.mjs`: poll-interval cron + settings-normalization helpers (unit tested)
 - `src/core/bot-core.mjs`: pure posting/checkpoint logic (unit tested)
 - `src/core/rss-parse.mjs`: RSS/Atom parser
@@ -18,12 +18,12 @@ It tracks the "last post" checkpoint plus a dedupe window so feed reorder/edit n
 - `tools/build.mjs`: esbuild bundle of the server entry to `dist/server/index.cjs` (CommonJS, required by Devvit Web)
 - `tests/*.test.mjs`: local tests
 
-The app runs on **Devvit Web** (`@devvit/web`). All configuration — server entry, event triggers, the `poll-rss-feed` scheduler task, and installation settings — lives in `devvit.json`. The Devvit CLI runs `npm run build` (via `devvit.json` `scripts`) to bundle the server before `playtest`/`upload`.
+The app runs on **Devvit Web** (`@devvit/web`). All configuration - server entry, event triggers, the `poll-rss-feed` scheduler task, and installation settings - lives in `devvit.json`. The Devvit CLI runs `npm run build` (via `devvit.json` `scripts`) to bundle the server before `playtest`/`upload`.
 
 ## Deployment account
 
 > **This app is owned and deployed by the Reddit account `username`.**
-> Every `npx devvit login` step below must authenticate as `username` — playtest, upload, and publish all require it. If `devvit login` reports `Logged in as <someone-else>`, run `npx devvit logout` and log back in as `username` before continuing, otherwise the CLI will target the wrong owner's app.
+> Every `npx devvit login` step below must authenticate as `username` - playtest, upload, and publish all require it. If `devvit login` reports `Logged in as <someone-else>`, run `npx devvit logout` and log back in as `username` before continuing, otherwise the CLI will target the wrong owner's app.
 
 ## Local setup
 
