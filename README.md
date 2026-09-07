@@ -37,7 +37,7 @@ Choose one or more official feed URLs to paste into `feedUrls` (one per line):
 - **Wirtschaft**: `https://www.tagesschau.de/wirtschaft/index~rss2.xml`
 - **Investigativ**: `https://www.tagesschau.de/investigativ/index~rss2.xml`
 - **Eilmeldung**: `https://www.tagesschau.de/infoservices/eilmeldungen-100~rss2.xml`
-- More feeds and regional editions: [Tagesschau RSS-Feeds Übersicht](https://www.tagesschau.de/infoservices/rssfeeds)
+- **More feeds and regional editions**: `https://www.tagesschau.de/infoservices/rssfeeds`
 
 ## Posting Behavior
 
@@ -52,7 +52,7 @@ The following domains are requested for this app:
 
 - `www.tagesschau.de` - Used to fetch public RSS news feeds from Tagesschau (tagesschau.de) to create link/self posts on Reddit.
 
-This list must stay in sync with the `http.domains` array in [`devvit.json`](./devvit.json).
+This list must stay in sync with the `http.domains` array in [`devvit.json`](https://github.com/phixion/tagesschau-bot/blob/main/devvit.json).
 
 ## Public API / Feeds Documentation
 
@@ -62,4 +62,4 @@ This list must stay in sync with the `http.domains` array in [`devvit.json`](./d
 
 ## Developer Documentation
 
-The technical and developer documentation is located in [DEVELOPER.md](./DEVELOPER.md).
+The technical and developer documentation is located in [DEVELOPER.md](https://github.com/phixion/tagesschau-bot/blob/main/DEVELOPER.md).
