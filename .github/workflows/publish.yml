@@ -104,9 +104,14 @@ jobs:
           echo "Using: devvit ${DEVVIT_CMD}"
           npx --yes devvit "${DEVVIT_CMD}" --bump "${BUMP_TYPE}" | tee /tmp/devvit-deploy.log
 
+          # Try multiple patterns to extract version
           version="$(sed -nE 's/.*Uploading new version "?([0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?)"?.*/\1/p' /tmp/devvit-deploy.log | tail -n1)"
           if [ -z "${version}" ]; then
             version="$(sed -nE 's/.*version[^0-9]*([0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?).*/\1/p' /tmp/devvit-deploy.log | tail -n1)"
+          fi
+          if [ -z "${version}" ]; then
+            # Fallback: check devvit.json for the version
+            version="$(sed -nE 's/.*"version"[^0-9]*"([0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?)".*/\1/p' devvit.json | head -n1)"
           fi
 
           if [ -z "${version}" ]; then
