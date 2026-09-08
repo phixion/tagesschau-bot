@@ -38,6 +38,8 @@ Choose one or more official feed URLs to paste into `feedUrls` (one per line):
 - **Investigativ**: `https://www.tagesschau.de/investigativ/index~rss2.xml`
 - **Eilmeldung**: `https://www.tagesschau.de/infoservices/eilmeldungen-100~rss2.xml`
 - **More feeds and regional editions**: `https://www.tagesschau.de/infoservices/rssfeeds`
+- **Alternative Feed Breaking News**: `https://storage.googleapis.com/tagesschau-mirror-feed/eilmeldungen.xml`
+- **Alternative Feed General News**: `https://storage.googleapis.com/tagesschau-mirror-feed/alle-meldungen.xml`
 
 ## Posting Behavior
 
@@ -51,6 +53,7 @@ Choose one or more official feed URLs to paste into `feedUrls` (one per line):
 The following domains are requested for this app:
 
 - `www.tagesschau.de` - Used to fetch public RSS news feeds from Tagesschau (tagesschau.de) to create link/self posts on Reddit.
+- `storage.googleapis.com` - Alternatively used to fetch public RSS news feeds
 
 This list must stay in sync with the `http.domains` array in [`devvit.json`](https://github.com/phixion/tagesschau-bot/blob/main/devvit.json).
 

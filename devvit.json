@@ -53,7 +53,8 @@
     "http": {
       "enable": true,
       "domains": [
-        "www.tagesschau.de"
+        "www.tagesschau.de",
+        "storage.googleapis.com"
       ]
     },
     "redis": true,
