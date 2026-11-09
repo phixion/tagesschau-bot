@@ -39,7 +39,7 @@
     "@devvit/web": "0.14.2"
   },
   "devDependencies": {
-    "devvit": "0.14.2",
+    "devvit": "1.0.0",
     "esbuild": "0.28.1",
     "vitest": "4.1.10",
     "yaml": "^2.9.0"
